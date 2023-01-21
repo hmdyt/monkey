@@ -100,10 +100,10 @@ func TestReturnStatements(t *testing.T) {
 		)
 	}
 
-	for _, statememt := range program.Statements {
-		returnStatement, ok := statememt.(*ast.ReturnStatement)
+	for _, statement := range program.Statements {
+		returnStatement, ok := statement.(*ast.ReturnStatement)
 		if !ok {
-			t.Errorf("statement not *ast.returnStatement. got=%T", statememt)
+			t.Errorf("statement not *ast.returnStatement. got=%T", statement)
 			continue
 		}
 		if returnStatement.TokenLiteral() != "return" {
@@ -139,7 +139,7 @@ func TestIdentifierExpression(t *testing.T) {
 	if len(program.Statements) != 1 {
 		t.Fatalf("program has not enough statements. got=%d", len(program.Statements))
 	}
-	statemesnt, ok := program.Statements[0].(*ast.ExpressionStatement)
+	statement, ok := program.Statements[0].(*ast.ExpressionStatement)
 	if !ok {
 		t.Fatalf(
 			"program.Statements[0] is not ast.ExpressionStatement. got=%T",
@@ -147,9 +147,9 @@ func TestIdentifierExpression(t *testing.T) {
 		)
 	}
 
-	identifier, ok := statemesnt.Expression.(*ast.Identifier)
+	identifier, ok := statement.Expression.(*ast.Identifier)
 	if !ok {
-		t.Fatalf("expression not *ast,Identifier. got=%T", statemesnt.Expression)
+		t.Fatalf("expression not *ast,Identifier. got=%T", statement.Expression)
 	}
 	if identifier.Value != "foobar" {
 		t.Errorf("identifier.Value not %s. got=%s", "foobar", identifier.Value)
@@ -174,7 +174,7 @@ func TestIntegerLiteralExpression(t *testing.T) {
 	if len(program.Statements) != 1 {
 		t.Fatalf("program has not enough statements. got=%d", len(program.Statements))
 	}
-	statemesnt, ok := program.Statements[0].(*ast.ExpressionStatement)
+	statement, ok := program.Statements[0].(*ast.ExpressionStatement)
 	if !ok {
 		t.Fatalf(
 			"program.Statements[0] is not ast.ExpressionStatement. got=%T",
@@ -182,9 +182,9 @@ func TestIntegerLiteralExpression(t *testing.T) {
 		)
 	}
 
-	literal, ok := statemesnt.Expression.(*ast.IntegerLiteral)
+	literal, ok := statement.Expression.(*ast.IntegerLiteral)
 	if !ok {
-		t.Fatalf("expression not *ast,Identifier. got=%T", statemesnt.Expression)
+		t.Fatalf("expression not *ast,Identifier. got=%T", statement.Expression)
 	}
 	if literal.Value != 5 {
 		t.Errorf("literal.Value not %d. got=%d", 5, literal.Value)

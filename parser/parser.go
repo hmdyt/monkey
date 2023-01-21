@@ -19,7 +19,7 @@ const (
 	CALL       // SomeFunction(X)
 )
 
-var precedendes = map[token.TokenType]int{
+var precedences = map[token.TokenType]int{
 	token.EQ:       EQUALS,
 	token.NOT_EQ:   EQUALS,
 	token.LT:       LESGREATER,
@@ -53,7 +53,7 @@ func New(l *lexer.Lexer) *Parser {
 
 	p.prefixParseFns = make(map[token.TokenType]prefixParseFn)
 	p.registerPrefix(token.INDENT, p.parseIdentifier)
-	p.registerPrefix(token.INT, p.parseIntergerLiteral)
+	p.registerPrefix(token.INT, p.parseIntegerLiteral)
 	p.registerPrefix(token.BANG, p.parsePrefixExpression)
 	p.registerPrefix(token.MINUS, p.parsePrefixExpression)
 
@@ -196,7 +196,7 @@ func (p *Parser) parseIdentifier() ast.Expression {
 	return &ast.Identifier{Token: p.currentToken, Value: p.currentToken.Literal}
 }
 
-func (p *Parser) parseIntergerLiteral() ast.Expression {
+func (p *Parser) parseIntegerLiteral() ast.Expression {
 	literal := &ast.IntegerLiteral{Token: p.currentToken}
 
 	value, err := strconv.ParseInt(p.currentToken.Literal, 0, 64)
@@ -265,14 +265,14 @@ func (p *Parser) registerInfix(tokenType token.TokenType, fn infixParseFn) {
 }
 
 func (p *Parser) peekPrecedence() int {
-	if p, ok := precedendes[p.peekToken.Type]; ok {
+	if p, ok := precedences[p.peekToken.Type]; ok {
 		return p
 	}
 	return LOWEST
 }
 
 func (p *Parser) currentPrecedence() int {
-	if p, ok := precedendes[p.currentToken.Type]; ok {
+	if p, ok := precedences[p.currentToken.Type]; ok {
 		return p
 	}
 	return LOWEST
