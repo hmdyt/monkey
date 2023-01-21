@@ -1,7 +1,6 @@
 package parser
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/hmdyt/monkey/ast"
@@ -115,19 +114,6 @@ func TestReturnStatements(t *testing.T) {
 	}
 }
 
-func checkParserErrors(t *testing.T, p *Parser) {
-	errors := p.Errors()
-	if len(errors) == 0 {
-		return
-	}
-
-	t.Errorf("parser has %d errors", len(errors))
-	for _, msg := range errors {
-		t.Errorf("parser error: %q", msg)
-	}
-	t.FailNow()
-}
-
 func TestIdentifierExpression(t *testing.T) {
 	input := "foobar;"
 
@@ -147,19 +133,8 @@ func TestIdentifierExpression(t *testing.T) {
 		)
 	}
 
-	identifier, ok := statement.Expression.(*ast.Identifier)
-	if !ok {
-		t.Fatalf("expression not *ast,Identifier. got=%T", statement.Expression)
-	}
-	if identifier.Value != "foobar" {
-		t.Errorf("identifier.Value not %s. got=%s", "foobar", identifier.Value)
-	}
-	if identifier.TokenLiteral() != "foobar" {
-		t.Errorf(
-			"identifier.TokenLiteral not %s. got=%s",
-			"foobar",
-			identifier.TokenLiteral(),
-		)
+	if !testIdentifier(t, statement.Expression, "foobar") {
+		return
 	}
 }
 
@@ -182,19 +157,8 @@ func TestIntegerLiteralExpression(t *testing.T) {
 		)
 	}
 
-	literal, ok := statement.Expression.(*ast.IntegerLiteral)
-	if !ok {
-		t.Fatalf("expression not *ast,Identifier. got=%T", statement.Expression)
-	}
-	if literal.Value != 5 {
-		t.Errorf("literal.Value not %d. got=%d", 5, literal.Value)
-	}
-	if literal.TokenLiteral() != "5" {
-		t.Errorf(
-			"literal.TokenLiteral not %s. got=%s",
-			"5",
-			literal.TokenLiteral(),
-		)
+	if !testLiteralExpression(t, statement.Expression, 5) {
+		return
 	}
 }
 
@@ -233,31 +197,10 @@ func TestParsingPrefixExpressions(t *testing.T) {
 			t.Fatalf("expression.Operator is not '%s'. got=%s",
 				tt.operator, expression.Operator)
 		}
-		if !testIntegerLiteral(t, expression.Right, tt.value) {
+		if !testLiteralExpression(t, expression.Right, tt.value) {
 			return
 		}
 	}
-}
-
-func testIntegerLiteral(t *testing.T, intLiteral ast.Expression, value int64) bool {
-	integer, ok := intLiteral.(*ast.IntegerLiteral)
-	if !ok {
-		t.Errorf("il not *ast.IntegerLiteral. got=%T", intLiteral)
-		return false
-	}
-
-	if integer.Value != value {
-		t.Errorf("integer.Value not %d. got=%d", value, integer.Value)
-		return false
-	}
-
-	if integer.TokenLiteral() != fmt.Sprintf("%d", value) {
-		t.Errorf("integ.TokenLiteral not %d. got=%s", value,
-			integer.TokenLiteral())
-		return false
-	}
-
-	return true
 }
 
 func TestParsingInfixExpressions(t *testing.T) {
@@ -294,25 +237,7 @@ func TestParsingInfixExpressions(t *testing.T) {
 				program.Statements[0])
 		}
 
-		expression, ok := statement.Expression.(*ast.InfixExpression)
-		if !ok {
-			t.Fatalf("expression is not ast.InfixExpression. got=%T",
-				statement.Expression)
-		}
-
-		if !testIntegerLiteral(t, expression.Left, tt.leftValue) {
-			return
-		}
-
-		if expression.Operator != tt.operator {
-			t.Fatalf(
-				"expression.Operator is not '%s'. got=%s",
-				tt.operator,
-				expression.Operator,
-			)
-		}
-
-		if !testIntegerLiteral(t, expression.Right, tt.rightValue) {
+		if !testInfixExpression(t, statement.Expression, tt.leftValue, tt.operator, tt.rightValue) {
 			return
 		}
 	}
