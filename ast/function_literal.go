@@ -13,9 +13,9 @@ type FunctionLiteral struct {
 	Body       *BlockStatement
 }
 
-func (f FunctionLiteral) expressionNode()      {}
-func (f FunctionLiteral) TokenLiteral() string { return f.Token.Literal }
-func (f FunctionLiteral) String() string {
+func (f *FunctionLiteral) expressionNode()      {}
+func (f *FunctionLiteral) TokenLiteral() string { return f.Token.Literal }
+func (f *FunctionLiteral) String() string {
 	var out bytes.Buffer
 
 	var params []string

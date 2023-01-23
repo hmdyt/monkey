@@ -13,9 +13,9 @@ type CallExpression struct {
 	Arguments []Expression
 }
 
-func (c CallExpression) expressionNode()      {}
-func (c CallExpression) TokenLiteral() string { return c.Token.Literal }
-func (c CallExpression) String() string {
+func (c *CallExpression) expressionNode()      {}
+func (c *CallExpression) TokenLiteral() string { return c.Token.Literal }
+func (c *CallExpression) String() string {
 	var out bytes.Buffer
 
 	var args []string

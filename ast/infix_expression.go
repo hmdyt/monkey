@@ -13,9 +13,9 @@ type InfixExpression struct {
 	Right    Expression
 }
 
-func (i InfixExpression) expressionNode()      {}
-func (i InfixExpression) TokenLiteral() string { return i.Token.Literal }
-func (i InfixExpression) String() string {
+func (i *InfixExpression) expressionNode()      {}
+func (i *InfixExpression) TokenLiteral() string { return i.Token.Literal }
+func (i *InfixExpression) String() string {
 	var out bytes.Buffer
 
 	out.WriteString("(")
