@@ -9,14 +9,17 @@ import (
 )
 
 type Type string
+type BuiltinFunction func(args ...Object) Object
 
 const (
 	IntegerObj     = "INTEGER"
 	BooleanObj     = "BOOLEAN"
+	StringObj      = "STRING"
 	NullObj        = "NULL"
 	ReturnValueObj = "RETURN_VALUE"
 	ErrorObj       = "ERROR"
 	FunctionObj    = "FUNCTION"
+	BuiltinObj     = "BUILTIN"
 )
 
 type Object interface {
@@ -37,6 +40,13 @@ type Boolean struct {
 
 func (b *Boolean) Type() Type      { return BooleanObj }
 func (b *Boolean) Inspect() string { return fmt.Sprintf("%t", b.Value) }
+
+type String struct {
+	Value string
+}
+
+func (s *String) Type() Type      { return StringObj }
+func (s *String) Inspect() string { return s.Value }
 
 type Null struct{}
 
@@ -81,3 +91,10 @@ type Error struct {
 
 func (e Error) Type() Type      { return ErrorObj }
 func (e Error) Inspect() string { return "ERROR: " + e.Message }
+
+type Builtin struct {
+	Function BuiltinFunction
+}
+
+func (b *Builtin) Type() Type      { return BuiltinObj }
+func (b *Builtin) Inspect() string { return "builtin function" }

@@ -9,6 +9,7 @@ const (
 	// 識別子, リテラル
 	INDENT = "INDENT"
 	INT    = "INT"
+	STRING = "STRING"
 
 	// operator
 	ASSIGN   = "="
