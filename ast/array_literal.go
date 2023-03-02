@@ -17,13 +17,13 @@ func (a ArrayLiteral) TokenLiteral() string { return a.Token.Literal }
 func (a ArrayLiteral) String() string {
 	var out bytes.Buffer
 
-	elements := []string{}
+	var elements []string
 	for _, element := range a.Elements {
 		elements = append(elements, element.String())
 	}
 
 	out.WriteString("[")
-	out.WriteString(strings.Join(elements, ","))
+	out.WriteString(strings.Join(elements, ", "))
 	out.WriteString("]")
 
 	return out.String()
